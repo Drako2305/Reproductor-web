@@ -64,18 +64,75 @@ let activePlaylistId = '';
 let dbPromise: Promise<IDBDatabase> | null = null;
 let pointerDrag: { id: string; startX: number; startY: number; active: boolean } | null = null;
 
-const albumCovers: Record<string, string> = {
-  'Slam_Funk-7603': 'Slam_Funk-7603.jpg',
-  'Directionless_EP-8295': 'Directionless_EP-8295.jpg',
-  'Jazz_Sampler-9619': 'Jazz_Sampler-9619.jpg',
-  'Classical_Sampler-9615': 'Classical_Sampler-9615.jpg',
-  '20110721224709348-9605': '20110721224709348-9605.jpg',
-  'jamendo-116889': 'cover.jpg',
-  'hot_salsa_trip-8727': 'hot_salsa_trip-8727.jpg',
-  'Dred_Reggae-18488': 'Dred_Reggae-18488.jpg'
-};
-
 const genreSuggestions = ['Reguetón', 'Pop', 'Electrónica', 'Rock', 'Hip-hop / Funk', 'Indie / Electrónica', 'Jazz', 'Clásica', 'Salsa', 'Reggae', 'Blues', 'Folk'];
+
+function buildLocalCoverDataUrl(title: string, genre: string): string {
+  const initials = (title || 'DJ').replace(/[^A-Za-z0-9]/g, '').slice(0, 2).toUpperCase() || 'DJ';
+  const palette: Record<string, string[]> = {
+    rock: ['#1b2432', '#ff8a5b'],
+    pop: ['#2f1b4e', '#ff5ec4'],
+    electronic: ['#0f2d2c', '#57d1b9'],
+    jazz: ['#2d2c2f', '#f6c453'],
+    classical: ['#1f2940', '#7aa2ff'],
+    latin: ['#2f1f1b', '#ff9a3d'],
+    reggae: ['#182a1b', '#7fe37e'],
+    indie: ['#2d1f31', '#c18cff'],
+    blues: ['#1a2a38', '#75b4ff'],
+    reggaeton: ['#2b2d52', '#ff7aa2'],
+    other: ['#1a1d24', '#8ad7d7']
+  };
+  const colors = palette[genreTheme(genre)] ?? palette.other;
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+      <defs>
+        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${colors[0]}"/>
+          <stop offset="100%" stop-color="${colors[1]}"/>
+        </linearGradient>
+      </defs>
+      <rect width="300" height="300" fill="url(#g)"/>
+      <circle cx="150" cy="110" r="82" fill="rgba(255,255,255,0.08)"/>
+      <text x="50%" y="53%" fill="white" font-size="72" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">${initials}</text>
+      <text x="50%" y="78%" fill="rgba(255,255,255,0.9)" font-size="18" font-family="Arial, sans-serif" letter-spacing="3" text-anchor="middle">${genre.toUpperCase()}</text>
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function buildLocalAudioUrl(): string {
+  const sampleRate = 22050;
+  const totalSamples = sampleRate;
+  const buffer = new ArrayBuffer(44 + totalSamples * 2);
+  const view = new DataView(buffer);
+
+  const writeString = (offset: number, text: string) => {
+    for (let i = 0; i < text.length; i += 1) {
+      view.setUint8(offset + i, text.charCodeAt(i));
+    }
+  };
+
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + totalSamples * 2, true);
+  writeString(8, 'WAVE');
+  writeString(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, 'data');
+  view.setUint32(40, totalSamples * 2, true);
+
+  let offset = 44;
+  for (let i = 0; i < totalSamples; i += 1) {
+    view.setInt16(offset, 0, true);
+    offset += 2;
+  }
+
+  return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
+}
 
 const seeds: SeedTrack[] = [
   { title: 'Nothing Like Captain Crunch', artist: 'Broke For Free', genre: 'Hip-hop / Funk', albumId: 'Slam_Funk-7603', file: 'Broke_For_Free_-_01_-_Nothing_Like_Captain_Crunch.mp3', licenseName: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/' },
@@ -199,12 +256,14 @@ async function getMedia(mediaId: string): Promise<Blob | null> {
 
 function createSeedPlaylist(): PlaylistEntry {
   const list = new DoublyLinkedList();
+  const localAudio = buildLocalAudioUrl();
+  mediaObjectUrls.add(localAudio);
+
   for (const seed of seeds) {
-    const source = `https://archive.org/download/${seed.albumId}/${encodeURIComponent(seed.file)}`;
-    const node = list.addAtEnd(seed.title, seed.artist, seed.genre, 0, source);
+    const node = list.addAtEnd(seed.title, seed.artist, seed.genre, 0, localAudio);
     trackDetails.set(node.id, {
       album: seed.albumId,
-      artworkUrl: albumCovers[seed.albumId] ? `https://archive.org/download/${seed.albumId}/${encodeURIComponent(albumCovers[seed.albumId])}` : '',
+      artworkUrl: buildLocalCoverDataUrl(seed.title, seed.genre),
       sourceUrl: `https://archive.org/details/${seed.albumId}`,
       licenseName: seed.licenseName,
       licenseUrl: seed.licenseUrl
