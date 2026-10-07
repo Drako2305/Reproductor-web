@@ -1,6 +1,6 @@
-# drakdstdj - Reproductor Web & DJ Studio
+# drak-dj - Reproductor Web & DJ Studio
 
-> **drakdstdj** es una aplicación web moderna e interactiva desarrollada en **TypeScript** y **Vite**, diseñada específicamente como proyecto académico para la gestión de estructuras de datos mediante **Listas Doblemente Enlazadas**, combinadas con una interfaz inspirada en Spotify, soporte para múltiples playlists, modo claro/oscuro y efectos DJ en tiempo real.
+> **drak-dj** es una aplicación web moderna e interactiva desarrollada en **TypeScript** y **Vite**, diseñada específicamente como proyecto académico para la gestión de estructuras de datos mediante **Listas Doblemente Enlazadas**, combinadas con una interfaz inspirada en Spotify, soporte para múltiples playlists, modo claro/oscuro y efectos DJ en tiempo real.
 
 ---
 
