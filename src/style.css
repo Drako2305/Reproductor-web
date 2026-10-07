@@ -959,9 +959,19 @@ body.is-reordering {
   cursor: pointer;
 }
 
+.queue-remove {
+  color: #ff9a9a;
+  background: rgba(255, 92, 92, 0.12);
+}
+
 .reorder-controls button:hover:not(:disabled) {
   color: #101a14;
   background: var(--accent);
+}
+
+.queue-remove:hover:not(:disabled) {
+  color: #fff;
+  background: #ff5b5b;
 }
 
 .reorder-controls button:disabled {

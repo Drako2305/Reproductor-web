@@ -471,6 +471,26 @@ function moveTrack(trackId: string, direction: -1 | 1): void {
   saveLibrary();
 }
 
+function removeTrack(trackId: string): void {
+  const list = getList();
+  const node = findTrack(trackId, list);
+  if (!list || !node) return;
+
+  const next = node.next ?? node.prev;
+  if (node.prev) node.prev.next = node.next; else list.head = node.next;
+  if (node.next) node.next.prev = node.prev; else list.tail = node.prev;
+
+  if (list.current === node) {
+    list.current = next ?? null;
+  }
+
+  trackDetails.delete(node.id);
+  renderQueue();
+  updatePlayer();
+  saveLibrary();
+  setStatus(`Se eliminó «${node.title}» de la cola.`);
+}
+
 function renderQueue(): void {
   const element = document.getElementById('song-list') as HTMLOListElement | null;
   const entry = getPlaylist();
@@ -548,6 +568,16 @@ function renderQueue(): void {
         button.disabled = disabled;
         controls.appendChild(button);
       }
+
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'queue-remove';
+      removeButton.dataset.action = 'remove';
+      removeButton.textContent = '✕';
+      removeButton.title = 'Quitar de la cola';
+      removeButton.setAttribute('aria-label', `Quitar ${node.title} de la cola`);
+      controls.appendChild(removeButton);
+
       item.append(handle, select, duration, controls);
       element.appendChild(item);
       visible += 1;
@@ -742,6 +772,7 @@ function setupListeners(): void {
     if (!item || target.closest('.queue-drag-handle')) return;
     if (action === 'up') moveTrack(item.dataset.trackId!, -1);
     else if (action === 'down') moveTrack(item.dataset.trackId!, 1);
+    else if (action === 'remove') removeTrack(item.dataset.trackId!);
     else {
       const selected = findTrack(item.dataset.trackId!);
       const list = getList();
