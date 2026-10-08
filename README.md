@@ -1,89 +1,89 @@
-# drak-dj - Reproductor Web & DJ Studio
+# drak-dj
 
-> **drak-dj** es una aplicación web moderna e interactiva desarrollada en **TypeScript** y **Vite**, diseñada específicamente como proyecto académico para la gestión de estructuras de datos mediante **Listas Doblemente Enlazadas**, combinadas con una interfaz inspirada en Spotify, soporte para múltiples playlists, modo claro/oscuro y efectos DJ en tiempo real.
+Reproductor web desarrollado con TypeScript y Vite. El proyecto académico utiliza una lista doblemente enlazada para administrar la cola de reproducción y las playlists.
 
-> **Demo en producción:** https://reproductor-web-eight.vercel.app/
+**Aplicación en producción:** [reproductor-web-eight.vercel.app](https://reproductor-web-eight.vercel.app/)
 
----
+## Funciones
 
-## Características Principales
+- Reproducir, pausar y navegar entre las pistas de la playlist.
+- Administrar varias playlists independientes.
+- Añadir pistas MP3 desde el dispositivo, con título, artista y género.
+- Reordenar la cola, buscar y filtrar pistas, y quitar pistas de la playlist.
+- Ajustar volumen y velocidad de reproducción.
+- Cambiar entre tema claro y oscuro.
+- Guardar playlists y preferencias en el navegador. Los archivos MP3 añadidos se almacenan localmente y no se suben al servidor.
+- Usar pistas de demostración y carátulas generadas localmente, sin depender de recursos de audio externos.
 
-- **Estructura de Datos NATIVA:** Implementación robusta de una **Lista Doblemente Enlazada (`DoublyLinkedList`)** en TypeScript (`Node.ts`, `DoublyLinkedList.ts`) que controla de forma precisa los punteros `next` y `prev` para la cola de reproducción.
-- **Interfaz Minimalista Estilo Spotify:** Diseño inmersivo de alta gama con carátula centrada, barra de progreso interactiva, controles fluidos y un panel moderno para la cola de canciones.
-- **Modo Claro / Modo Oscuro (Theme Toggle):** Botón de alternancia dinámica para cambiar al instante entre un tema claro limpio y un tema oscuro elegante.
-- **Subida de Archivos MP3 y Asignación Automática:** Permite al usuario subir pistas de audio locales en formato MP3 indicando título, artista y género, asignando automáticamente una carátula llamativa correspondiente al género seleccionado.
-- **Gestión de Múltiples Playlists:** Creación y administración de listas de reproducción independientes, cada una gestionada mediante su propia instancia de lista doble.
-- **Consola DJ Virtual:** Controles deslizantes interactivos para modificar la velocidad y el pitch del audio en tiempo real.
+## Tecnologías
 
----
+- TypeScript
+- Vite
+- HTML y CSS
+- IndexedDB y `localStorage` para persistencia local
+- GitHub y Vercel
 
-## Tecnologías Utilizadas
-
-- **Lenguaje:** TypeScript / JavaScript (ESModules)
-- **Empaquetador y Entorno:** Vite
-- **Estilos:** CSS3 Moderno (Variables CSS, Flexbox, Grid, soporte dinámico de temas)
-- **Control de Versiones:** Git & GitHub
-- **Infraestructura de Despliegue:** Vercel
-
----
-
-## Estructura del Proyecto
+## Estructura del proyecto
 
 ```text
 reproductor-web/
 ├── public/
+│   ├── favicon.svg
+│   └── icons.svg
 ├── src/
-│   ├── models/
-│   │   ├── Node.ts             # Estructura del nodo de la lista doble
-│   │   └── DoublyLinkedList.ts # Lógica y punteros de la lista doble
-│   ├── main.ts                 # Lógica principal de la UI, eventos y audio
-│   └── style.css               # Estilos globales y temas (Claro/Oscuro)
+│   ├── assets/
+│   ├── counter.ts
+│   ├── DoublyLinkedList.ts
+│   ├── drakDj.ts
+│   ├── main.ts
+│   ├── Node.ts
+│   └── style.css
 ├── index.html
 ├── package.json
 └── tsconfig.json
 ```
 
----
+## Requisitos
 
-## Instalación y Ejecución Local
+- Node.js y npm
+- Un navegador moderno
 
-Sigue estos pasos para clonar y poner en marcha el proyecto en tu máquina local:
+## Ejecución local
 
-1. **Clonar el repositorio:**
-   ```bash
-   git clone https://github.com/Drako2305/Reproductor-web.git
-   cd Reproductor-web
-   ```
+Clona el repositorio e instala sus dependencias:
 
-2. **Instalar las dependencias:**
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/Drako2305/Reproductor-web.git
+cd Reproductor-web
+npm install
+```
 
-3. **Iniciar el servidor de desarrollo local con Vite:**
-   ```bash
-   npm run dev
-   ```
+Inicia el servidor de desarrollo:
 
-4. Abre el enlace local que aparece en tu terminal (generalmente `http://localhost:5173`) en tu navegador web.
+```bash
+npm run dev
+```
 
----
+Abre en el navegador la URL local que muestre Vite, normalmente `http://localhost:5173/`.
 
-##  Despliegue en Producción
+## Compilación
 
-La aplicación está desplegada en Vercel y disponible en:
-
-https://reproductor-web-eight.vercel.app/
-
-Para generar los archivos estáticos optimizados listos para despliegue:
+Para comprobar los tipos de TypeScript y generar la versión optimizada:
 
 ```bash
 npm run build
 ```
 
-La carpeta `dist` generada contendrá todo el paquete listo para ser publicado en Vercel u otro hosting estático.
+Para servir localmente esa compilación:
 
----
+```bash
+npm run preview
+```
+
+## Despliegue
+
+La versión publicada está disponible en [Vercel](https://reproductor-web-eight.vercel.app/). El proyecto genera archivos estáticos en `dist/` mediante `npm run build`.
 
 ## Autor
-Desarrollado como proyecto académico de Ingeniería de Software.
+
+Proyecto académico de Ingeniería de Software, desarrollado por Drako.
