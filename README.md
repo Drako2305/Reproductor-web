@@ -2,6 +2,8 @@
 
 > **drak-dj** es una aplicación web moderna e interactiva desarrollada en **TypeScript** y **Vite**, diseñada específicamente como proyecto académico para la gestión de estructuras de datos mediante **Listas Doblemente Enlazadas**, combinadas con una interfaz inspirada en Spotify, soporte para múltiples playlists, modo claro/oscuro y efectos DJ en tiempo real.
 
+> **Demo en producción:** https://reproductor-web-eight.vercel.app/
+
 ---
 
 ## Características Principales
@@ -21,7 +23,7 @@
 - **Empaquetador y Entorno:** Vite
 - **Estilos:** CSS3 Moderno (Variables CSS, Flexbox, Grid, soporte dinámico de temas)
 - **Control de Versiones:** Git & GitHub
-- **Infraestructura de Despliegue:** AWS (Amazon S3 / CloudFront)
+- **Infraestructura de Despliegue:** Vercel
 
 ---
 
@@ -49,8 +51,8 @@ Sigue estos pasos para clonar y poner en marcha el proyecto en tu máquina local
 
 1. **Clonar el repositorio:**
    ```bash
-   git clone https://github.com/TU_USUARIO/drakdstdj.git
-   cd drakdstdj
+   git clone https://github.com/Drako2305/Reproductor-web.git
+   cd Reproductor-web
    ```
 
 2. **Instalar las dependencias:**
@@ -69,13 +71,17 @@ Sigue estos pasos para clonar y poner en marcha el proyecto en tu máquina local
 
 ##  Despliegue en Producción
 
-Para generar los archivos estáticos optimizados listos para la nube (AWS S3):
+La aplicación está desplegada en Vercel y disponible en:
+
+https://reproductor-web-eight.vercel.app/
+
+Para generar los archivos estáticos optimizados listos para despliegue:
 
 ```bash
 npm run build
 ```
 
-La carpeta `dist` generada contendrá todo el paquete listo para ser alojado en Amazon S3.
+La carpeta `dist` generada contendrá todo el paquete listo para ser publicado en Vercel u otro hosting estático.
 
 ---
 
